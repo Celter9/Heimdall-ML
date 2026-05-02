@@ -38,13 +38,13 @@ def route_action(
         
         # Save the safe, redacted string and update the status
         scan_record.redacted_text = redaction_result["redacted_text"]
-        scan_record.status = "processing"
+        scan_record.status = "complete"
         db.commit()
         
         return {
             "status": scan_record.status,
             "scan_id": scan_record.scan_id,
-            "message": "Document redacted securely and is continuing processing."
+            "message": "Document redacted securely and is fully processed."
         }
 
     elif final_action == "ASK":

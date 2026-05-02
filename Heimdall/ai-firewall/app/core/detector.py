@@ -1,9 +1,23 @@
 import uuid
 from presidio_analyzer import AnalyzerEngine, PatternRecognizer, Pattern
+from presidio_analyzer.nlp_engine import NlpEngineProvider
 from app.schemas.scan import DetectionItem, Severity
 
-# Initialize a global AnalyzerEngine
-analyzer = AnalyzerEngine(supported_languages=["en"])
+# Initialize a global AnalyzerEngine using the heavy Transformer Model
+configuration = {
+    "nlp_engine_name": "transformers",
+    "models": [{
+        "lang_code": "en",
+        "model_name": {
+            "spacy": "en_core_web_lg",
+            "transformers": "dslim/bert-base-NER"
+        }
+    }]
+}
+provider = NlpEngineProvider(nlp_configuration=configuration)
+nlp_engine = provider.create_engine()
+
+analyzer = AnalyzerEngine(nlp_engine=nlp_engine, supported_languages=["en"])
 
 # --- Custom Recognizers for Indian Context ---
 
@@ -43,10 +57,23 @@ ifsc_recognizer = PatternRecognizer(
     context=["ifsc", "bank", "branch"]
 )
 
+# 4. Indian Mobile Number (10 digits anywhere, even without word boundaries)
+in_mobile_pattern = Pattern(
+    name="in_mobile_pattern",
+    regex=r"(?<!\d)\d{10}(?!\d)",
+    score=0.85
+)
+in_mobile_recognizer = PatternRecognizer(
+    supported_entity="PHONE_NUMBER",
+    patterns=[in_mobile_pattern],
+    context=["phone", "mobile", "contact"]
+)
+
 # Add custom recognizers to the engine registry
 analyzer.registry.add_recognizer(aadhaar_recognizer)
 analyzer.registry.add_recognizer(pan_recognizer)
 analyzer.registry.add_recognizer(ifsc_recognizer)
+analyzer.registry.add_recognizer(in_mobile_recognizer)
 
 # Map Presidio entity types to Severity enum levels
 ENTITY_SEVERITY_MAP = {
@@ -80,8 +107,16 @@ def detect(text: str) -> list[DetectionItem]:
     if not text:
         return []
 
-    # Analyze the text (entities=None will use all supported entities in the registry)
-    presidio_results = analyzer.analyze(text=text, entities=None, language='en')
+    # Explicitly list the entities we care about. 
+    # This prevents Presidio's built-in DATE_TIME or UK_NHS from causing false positives!
+    SUPPORTED_ENTITIES = [
+        "PERSON", "LOCATION", "NRP", "IP_ADDRESS", 
+        "PHONE_NUMBER", "EMAIL_ADDRESS", "CREDIT_CARD", 
+        "CRYPTO", "AADHAAR_NUMBER", "PAN_CARD", "IFSC_CODE"
+    ]
+
+    # Analyze the text
+    presidio_results = analyzer.analyze(text=text, entities=SUPPORTED_ENTITIES, language='en')
     
     detection_items = []
     

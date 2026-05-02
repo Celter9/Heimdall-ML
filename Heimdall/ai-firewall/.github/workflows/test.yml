@@ -30,7 +30,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Download spaCy Model
-        # Presidio depends on spaCy, so the model must be downloaded before testing
+        # Presidio depends on spaCy, so the model must be downloaded before testing.
         run: |
           python -m spacy download en_core_web_lg
 

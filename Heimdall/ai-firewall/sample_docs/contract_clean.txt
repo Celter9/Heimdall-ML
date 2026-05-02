@@ -1,0 +1,16 @@
+GENERAL BUSINESS SERVICES AGREEMENT
+
+This Agreement is made effectively as of January 1st, 2024, by and between Alpha Corp and Beta Services.
+
+1. SERVICES PROVIDED
+Alpha Corp agrees to provide standard consulting services regarding general infrastructure improvements.
+
+2. PAYMENT
+Beta Services agrees to compensate Alpha Corp at a rate of $150 per hour for services rendered, invoiced monthly.
+
+3. CONFIDENTIALITY
+Both parties agree to maintain strict confidentiality regarding all non-public business operations discussed during the term of this contract.
+
+Signatures:
+_______________________         _______________________
+Alpha Corp Representative       Beta Services Representative

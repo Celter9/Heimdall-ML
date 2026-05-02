@@ -73,10 +73,9 @@ async def submit_consent(
                     # We assume overrides map an entity_type to a custom placeholder string
                     det.placeholder = consent_request.overrides[det.entity_type]
         
-        # 5. Trigger the action router to resume processing for the LLM gateway.
-        # We explicitly pass "SUMMARIZE" to set status to 'ready_for_llm'
+        # 5. Trigger the action router to redact and complete the document.
         route_action(
-            final_action="SUMMARIZE",
+            final_action="REDACT",
             raw_text=scan_record.raw_text,
             detections=detections,
             scan_record=scan_record,
@@ -87,5 +86,5 @@ async def submit_consent(
             scan_id=scan_id,
             decision="APPROVED",
             next_status=scan_record.status,
-            message="Consent approved. Document has been queued for the LLM gateway."
+            message="Consent approved. Document has been redacted and processed."
         )

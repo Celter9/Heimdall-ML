@@ -21,13 +21,15 @@ def redact(text: str, analyzer_results: list) -> dict:
     # convert them back into RecognizerResults here if needed.
     presidio_results = []
     for res in analyzer_results:
-        if hasattr(res, "entity_type") and hasattr(res, "confidence"):
+        if hasattr(res, "entity_type"):
+            # Get the confidence score from whichever attribute exists
+            score = getattr(res, 'confidence', None) or getattr(res, 'score', None) or 1.0
             presidio_results.append(
                 RecognizerResult(
                     entity_type=res.entity_type,
                     start=res.start,
                     end=res.end,
-                    score=res.confidence
+                    score=score
                 )
             )
         else:

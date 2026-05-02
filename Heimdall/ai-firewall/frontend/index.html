@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heimdall AI Firewall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="container">
+        <header>
+            <div class="logo-icon">🛡️</div>
+            <h1>Heimdall AI Firewall</h1>
+            <p>Secure your uploads. Stop PII leaks at the perimeter.</p>
+        </header>
+
+        <section class="upload-card">
+            <div id="drop-zone" class="drop-zone">
+                <div class="upload-icon">📁</div>
+                <p>Drag and drop your document here</p>
+                <span class="or-text">or</span>
+                <label for="file-input" class="browse-btn">Browse Files</label>
+                <input type="file" id="file-input" hidden>
+            </div>
+            <div id="file-info" class="file-info hidden">
+                <span id="file-name">No file selected</span>
+                <button id="remove-file" class="remove-btn" title="Remove file">✖</button>
+            </div>
+            <button id="scan-btn" class="scan-btn" disabled>Scan Document</button>
+        </section>
+
+        <section id="result-container" class="result-container hidden">
+            <h2>Scan Results</h2>
+            <div class="result-card">
+                <div class="result-header">
+                    <span class="label">Status:</span>
+                    <span id="result-status" class="badge"></span>
+                </div>
+                <div class="result-row">
+                    <span class="label">Scan ID:</span>
+                    <span id="result-scan-id" class="code-font"></span>
+                </div>
+                <div class="result-row">
+                    <span class="label">Filename:</span>
+                    <span id="result-filename" class="code-font"></span>
+                </div>
+                <div class="result-row message-box">
+                    <span class="label">Message:</span>
+                    <p id="result-message"></p>
+                </div>
+                <div id="redacted-output-container" class="result-row hidden" style="margin-top: 1.5rem;">
+                    <span class="label">Redacted Output:</span>
+                    <div id="result-redacted-text" class="code-font" style="white-space: pre-wrap; max-height: 250px; overflow-y: auto; background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); padding: 1rem; border-radius: 8px; line-height: 1.6;"></div>
+                </div>
+                <div id="consent-panel" class="consent-panel hidden">
+                    <p class="consent-text">⚠️ This document contains entities that require your explicit consent before processing.</p>
+                    <div class="consent-buttons">
+                        <button id="consent-approve" class="consent-btn approve-btn">✅ Approve &amp; Process</button>
+                        <button id="consent-deny" class="consent-btn deny-btn">🚫 Deny &amp; Block</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

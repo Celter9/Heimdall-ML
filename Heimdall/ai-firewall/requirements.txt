@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+sqlalchemy
+presidio-analyzer[transformers]
+presidio-anonymizer
+spacy
+torch
+transformers
+tf-keras
+pdfplumber
+python-docx
+httpx
+pytest
